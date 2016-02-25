@@ -1,3 +1,0 @@
-This directory has three folders, one for exchange/steering from the +PCA1 direction (pPCA1), one for the -PCA1 direction (mPCA1), and one for the PCA2 direction (PCA2).
-
-Each directory has a *.prmtop file (the topology file), a PDB file used as input for NAMD (duplicated*.pdb; the coordinates are not used, however), a constraint file with constraint coordinates and values (constraints2.pdb), a PLUMED input file (plumed.dat), the input coordinates and box size (equilibrated2.restart.coor/xsc), and a NAMD configuration input file (tmd.conf).

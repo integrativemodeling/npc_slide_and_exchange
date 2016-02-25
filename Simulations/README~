@@ -1,5 +1,0 @@
-This repository contains starting files for these simulations:
-- Subfolders marked A1,A2,...,B3 correspond to simulations described in Table 1 (Supp. Information), sections A and B; the number corresponds to the row of the table (e.g., A1 corresponds to simulations in row 1 of section A in Table 1).
-- RAMD corresponds to the RAMD simulations described toward the end of the Results section.
-- exchange corresponds to the exchange/steering simulations described toward the end of the Results section.
-- 
