@@ -1,0 +1,1 @@
+Contains NAMD configuration file (RAMD.conf), PDB file (minimized1.pdb), equilibrated restart files (equilibrated2.restart.coor/xsc), and AMBER topology file (1mer-solvated.prmtop).  Constraint file at equil_c.pdb.  Script for RAMD at ramd.tcl.

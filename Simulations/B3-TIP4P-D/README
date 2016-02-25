@@ -1,0 +1,6 @@
+FSFG2:NTF2 simulation box using the TIP4P-D water model
+
+Files:
+configuration.ark - Anton configuration file
+start.dms         - Anton/Desmond topology file of starting conformation
+start.pdb         - starting conformation in PDB format

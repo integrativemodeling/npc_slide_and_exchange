@@ -1,0 +1,5 @@
+RAMD simulations for testing sliding of FSFG motif out of the crystallographic interaction sites.
+
+Contains NAMD configuration file (RAMD.conf), PDB file (minimized1.pdb), equilibrated restart files (equilibrated2.restart.coor/xsc), and AMBER topology file (1mer-solvated.prmtop).  Constraint file at equil_c.pdb.  Script for RAMD at ramd.tcl.
+
+The simulation can be run by using the RAMD.conf file with NAMD and PLUMED.

@@ -1,0 +1,154 @@
+# box is (88.983433 116.093397 89.802835)
+# min box with strain (for r_spread cutoffs only): (80.894030 105.539451 81.638941)
+# max box with strain (for n_k choice only):       (97.881776 127.702736 98.783118)
+# tempmax set to 350
+# n_k picked via 127.703 >= 87 ? 64 : 32
+# n_k = [ 64 64 64 ]
+# r_cut picked via 6.5 * 116.093 / 64
+# r_cut = 11.80
+#    r_cut    cutoffs: 10.1117537581 10.2048675814 13.1924314267 20.2235075162 20.4097351627 26.3848628535
+#    r_spread cutoffs: 5.68786148892 5.74023801452 7.42074267754 10.743738368 10.8426718052 14.0169583909
+#    r_spread chosen s.t.: 6.9656 (3.84g) <= 8.16282 (r_spread) <= 8.16282 (4.5g)
+#                        : 8.16282 (r_spread) + 1.475 (bumpy=6) <= 10.7437
+# r_spread = 8.16
+anton {
+    chem {
+        Escale = "1000."
+        FmaxSeparation = "2.0"
+        Fscale = "3000."
+        Tempmax = "350"
+        barostat_interval = "0"
+        maxBondLength = "4.0"
+        max_strain = "0.1"
+        r_over_sigmamin = "0.60"
+        rmin = "0.9"
+        thermostat_interval = "0"
+    }
+    tune {
+        check_overflow = "true"
+        checkpoint {
+            interval = "1200"
+        }
+        energy {
+            first = "0"
+            format = "eneseq"
+            interval = "240"
+            outdir = "energy"
+        }
+        go_verbosity = "0"
+        last_time = "Inf"
+        machine_size = ["4" "4" "4"]
+        regenerateBondProgram = "true"
+        trajectory {
+            first = "0"
+            format = "dtr"
+            interval = "240"
+            outdir = "run.atr"
+            periodicfix = "true"
+            write_velocity = true  #Uncomment if need the atomic velocities, but know this will greatly increase the size of the 
+        }
+    }
+}
+boot {
+    file = "new_FREE_FSFG.dms"
+}
+force {
+    nonbonded {
+        electrostatic {
+            type = "ewald"
+        }
+        far {
+            n_k = ["64" "64" "64"]
+            r_spread = "8.163"
+            type = "gse"
+        }
+        r_cut = "11.8"
+        r_lazy = "12.3"
+    }
+}
+global_cell {
+    r_clone = "8.517"
+}
+integrator {
+    Ber_NPT {
+        barostat {
+            kappa = "4.5e-05"
+            max_expansion_per_step = "1.1"
+            min_contraction_per_step = "0.95"
+            tau = "2.0"
+        }
+        max_velocity_scaling = "1.2"
+        min_velocity_scaling = "0.85"
+        tau = ["1.0"]
+        thermostat_molecular_ke = "true"
+    }
+    Ber_NVT {
+        max_velocity_scaling = "1.2"
+        min_velocity_scaling = "0.85"
+        tau = ["1.0"]
+        thermostat_molecular_ke = "true"
+    }
+    Multigrator {
+        barostat {
+            MTK {
+                T_ref = "312.15"
+                tau = "0.0416667"
+                thermostat {
+                    NoseHoover {
+                        chain {
+                            mts = "1"
+                            tau = ["0.0416667" "0.0416667" "0.0416667"]
+                        }
+                    }
+                    type = "NoseHoover"
+                }
+            }
+            interval = "240"
+            type = "MTK"
+        }
+        nve {
+            PLS {
+                number_of_stages = "3"
+            }
+            type = "PLS"
+        }
+        thermostat {
+            NoseHoover {
+                chains = [{
+                    mts = "1"
+                    tau = ["0.0416667" "0.0416667" "0.0416667"]
+                }]
+                use_molecular_ke = "true"
+            }
+            interval = "24"
+            type = "NoseHoover"
+        }
+    }
+    NH_NVT {
+        thermostat = [{
+            mts = "2"
+            tau = ["1." "1." "1."]
+        }]
+        thermostat_molecular_ke = "true"
+    }
+    V_NVE {
+    }
+    dt = "0.0020"
+    pressure {
+        isotropy = "isotropic"
+        max_margin_contraction = "0.9"
+        p_ref = "1"
+        tension_ref = ["0" "0" "0" "0" "0" "0" "0" "0" "0"]
+    }
+    remove_com_motion = "true"
+    respa {
+        bonded_interval = "1"
+        nonbonded_far_interval = "3"
+        nonbonded_near_interval = "1"
+    }
+    temperature = [{
+        T_ref = "312.15"
+    }]
+    type = "Multigrator"
+}
+

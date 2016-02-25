@@ -1,0 +1,7 @@
+FSFG6:NTF2 simulation box using the TIP4P-Ew water model, with TAMD
+restraints between linker residues 41-43 and 79-81 n FSFG6.
+
+Files:
+stard.dms         - equilibrated starting conformation for Antom simulations in DESRES format
+start.pdb         - equilibrated starting conformation in PDB format
+configuration.ark - Anton configuration file with TAMD restraints

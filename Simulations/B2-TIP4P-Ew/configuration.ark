@@ -1,0 +1,168 @@
+# box is (97.992227 113.110699 97.538739)
+# min box with strain (for r_spread cutoffs only): (89.083843 102.827909 88.671581)
+# max box with strain (for n_k choice only):       (107.791449 124.421769 107.292613)
+# tempmax set to 350
+# n_k picked via 124.422 >= 87 ? 64 : 32
+# n_k = [ 64 64 64 ]
+# r_cut picked via 6.5 * 113.111 / 64
+# r_cut = 11.49
+#    r_cut    cutoffs: 11.0839476477 11.1354803182 12.8534885682 22.1678952955 22.2709606364 25.7069771364
+#    r_spread cutoffs: 6.23472055185 6.26370767898 7.2300873196 11.7766943757 11.8314478381 13.6568316037
+#    r_spread chosen s.t.: 6.78664 (3.84g) <= 7.9531 (r_spread) <= 7.9531 (4.5g)
+#                        : 7.9531 (r_spread) + 1.475 (bumpy=6) <= 11.7767
+# r_spread = 7.95
+anton {
+    chem {
+        Escale = "1000."
+        FmaxSeparation = "2.0"
+        Fscale = "3000."
+        Tempmax = "350"
+        barostat_interval = "0"
+        maxBondLength = "4.0"
+        max_strain = "0.1"
+        r_over_sigmamin = "0.60"
+        rmin = "0.9"
+        thermostat_interval = "0"
+
+	
+ 	   group_restraints {
+ 	       interval = 3
+		groups = [ 
+ 	       	   { name=Linker2	center=mass     query="protein and resid 291 to 293 and backbone" 	   }
+ 	       	   { name=Linker4	center=mass 	query="protein and resid 329 to 331 and backbone"	   }
+ 	       	]
+ 	       restraints = [ {
+ 	       		type = distance
+ 	       		groups = [Linker2 Linker4]
+ 	       		TAMD = {
+ 	       			spring_constant = 100
+ 	       			gamma = 50
+ 	       			initial_equilibrium = 16.85567000251496 
+ 	       			seed = 1234567
+ 	       			T_bar = 1000
+ 	       			}
+ 	       		}
+ 		]
+    	}
+    }
+    tune {
+        check_overflow = "true"
+        checkpoint {
+            interval = "1440"
+        }
+        go_verbosity = "0"
+        last_time = "Inf"
+        machine_size = ["8" "8" "8"]
+        regenerateBondProgram = "true"
+        trajectory {
+            first = "0"
+            format = "dtr"
+            interval = "240"
+            outdir = "run.atr"
+            periodicfix = "true"
+        }
+    }
+}
+boot {
+    file = "equil4-all.dms"
+}
+force {
+    nonbonded {
+        electrostatic {
+            type = "ewald"
+        }
+        far {
+            n_k = ["64" "64" "64"]
+            r_spread = "7.953"
+            type = "gse"
+        }
+        r_cut = "11.49"
+        r_lazy = "11.99"
+    }
+}
+global_cell {
+    r_clone = "8.308"
+}
+integrator {
+    Ber_NPT {
+        barostat {
+            kappa = "4.5e-05"
+            max_expansion_per_step = "1.1"
+            min_contraction_per_step = "0.95"
+            tau = "2.0"
+        }
+        max_velocity_scaling = "1.2"
+        min_velocity_scaling = "0.85"
+        tau = ["1.0"]
+        thermostat_molecular_ke = "true"
+    }
+    Ber_NVT {
+        max_velocity_scaling = "1.2"
+        min_velocity_scaling = "0.85"
+        tau = ["1.0"]
+        thermostat_molecular_ke = "true"
+    }
+    Multigrator {
+        barostat {
+            MTK {
+                T_ref = "300.00"
+                tau = "0.0416667"
+                thermostat {
+                    NoseHoover {
+                        chain {
+                            mts = "1"
+                            tau = ["0.0416667" "0.0416667" "0.0416667"]
+                        }
+                    }
+                    type = "NoseHoover"
+                }
+            }
+            interval = "240"
+            type = "MTK"
+        }
+        nve {
+            PLS {
+                number_of_stages = "3"
+            }
+            type = "PLS"
+        }
+        thermostat {
+            NoseHoover {
+                chains = [{
+                    mts = "1"
+                    tau = ["0.0416667" "0.0416667" "0.0416667"]
+                }]
+                use_molecular_ke = "true"
+            }
+            interval = "24"
+            type = "NoseHoover"
+        }
+    }
+    NH_NVT {
+        thermostat = [{
+            mts = "2"
+            tau = ["1." "1." "1."]
+        }]
+        thermostat_molecular_ke = "true"
+    }
+    V_NVE {
+    }
+    dt = "0.0020"
+    pressure {
+        isotropy = "isotropic"
+        max_margin_contraction = "0.9"
+        p_ref = "1"
+        tension_ref = ["0" "0" "0" "0" "0" "0" "0" "0" "0"]
+    }
+    remove_com_motion = "true"
+    respa {
+        bonded_interval = "1"
+        nonbonded_far_interval = "3"
+        nonbonded_near_interval = "1"
+    }
+    temperature = [{
+        T_ref = "300"
+    }]
+    type = "Multigrator"
+}
+

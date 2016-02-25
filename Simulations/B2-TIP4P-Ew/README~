@@ -1,0 +1,4 @@
+topology.prmtop   - AMBER topology file
+stard.dms         - equilibrated starting conformation for Antom simulations in DESRES format
+start.pdb         - equilibrated starting conformation in PDB format
+configuration.ark - Anton configuration file with TAMD restraints

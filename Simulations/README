@@ -1,0 +1,22 @@
+Ths subfolders in this repository contains starting files for these simulations:
+
+- Subfolders marked A1-*,A2-*,...,B3-* correspond to simulations described
+  in Table 1 (Supp. Information), sections A and B; the number
+  corresponds to the row of the table (e.g., A1 corresponds to
+  simulations in row 1 of section A in Table 1), with either water
+  model TIP4P-Ew or TIP4P-D.
+
+  Spacifically
+        A1-*: free FSFG-6 (125 residues)
+        A2-*: free FSFG-2 (54 residues)
+        B1-*: FSFG-6:NTF2 (125:250 residues)
+        B2-*: FSFG-6:NTF2 (125:250 residues) with TAMD restraints
+        B3-*: FSFG-2:NTF2 (54:250 residues)
+
+- SlidingRAMD subfolder folder corresponds to the randomly-accelerated
+  MD simulations described toward the end of the Results section.
+
+- ExchangeTMD subfolder corresponds to the targeted MD simulations of
+  exchange described toward the end of the Results section.
+
+-

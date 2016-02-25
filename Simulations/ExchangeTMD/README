@@ -1,0 +1,5 @@
+This directory has three folders, corresponding to targeted MD simulations of exchange of two FG motifs, with the displacing FG motif approaching from either the +PCA1 direction (pPCA1), the -PCA1 direction (mPCA1), or the PCA2 direction (PCA2).
+
+Each directory has a *.prmtop file (the topology file), a PDB file used as input for NAMD (duplicated*.pdb; the coordinates are not used, however), a constraint file with constraint coordinates and values (constraints2.pdb), a PLUMED input file (plumed.dat), the input coordinates and box size (equilibrated2.restart.coor/xsc), and a NAMD configuration input file (tmd.conf).
+
+The simulation can be run by using the corresponding tmd.conf files with NAMD.

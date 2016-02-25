@@ -1,0 +1,20 @@
+Scripts for computing experimental relaxation values from trajectories described in this manuscript. Relaxation values and std-errors were computed using the following scripts for FSFG6 (125 residues), and can be easily adjusted to a different number of residues:
+
+1) Appropriate trajectory was loaded in vmd 1.9.2
+
+2) In the VMD TkConsole, the script relaxation_v2.tcl was sourced ("source relaxation_v2.tcl")
+
+3) For each residue, P2(dT) time autocorrelation function was computed
+   for different values of dT, for each of eight partially overlapping
+   time segments (to later estimate std-errors) by using the command:
+     "get_resid_P2_intervals <resid> <ns_per_frame> <stepf>"
+
+4a) - "python fit_all_v2.py" was used to compute the average R2/R1 values for each of 19 repeat residues for random selections of four out of nine time intervals
+    - mean and std-errors were computed using "python get_std_R2R1_from_all_v2.py"
+
+4b) - "python fit_all_FULL_SEQUENCE.py" was used to compute the R2/R1 for each of the 125 residues of FSFG6 (Prolines could be ignored later) for random selections of four out of nine time intervals
+    - and mean and std-errors were computed using "python get_std_R2R1_from_all_v2_nonaveraged.py"
+
+=========
+Note: In 4a and 4b, it is assumed that gnuplot, matlab, and tmux are installed
+=========

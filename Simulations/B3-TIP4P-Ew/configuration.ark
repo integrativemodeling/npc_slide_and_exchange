@@ -1,0 +1,153 @@
+# box is (109.952006 82.440311 82.389204)
+# min box with strain (for r_spread cutoffs only): (99.956369 74.945737 74.899276)
+# max box with strain (for n_k choice only):       (120.947206 90.684342 90.628124)
+# tempmax set to 350
+# n_k picked via 120.947 >= 87 ? 64 : 32
+# n_k = [ 64 64 64 ]
+# r_cut picked via 6.5 * 109.952 / 64
+# r_cut = 11.17
+#    r_cut    cutoffs: 9.36240954545 9.36821717045 12.494546125 18.7248190909 18.7364343409 24.98909225
+#    r_spread cutoffs: 5.26635536932 5.26962215838 7.02818219531 9.94756014205 9.95373074361 13.2754552578
+#    r_spread chosen s.t.: 6.59712 (3.84g) <= 7.731 (r_spread) <= 7.731 (4.5g)
+#                        : 7.731 (r_spread) + 1.475 (bumpy=6) <= 9.94756
+# r_spread = 7.73
+anton {
+    chem {
+        Escale = "1000."
+        FmaxSeparation = "2.0"
+        Fscale = "3000."
+        Tempmax = "350"
+        barostat_interval = "0"
+        maxBondLength = "4.0"
+        max_strain = "0.1"
+        r_over_sigmamin = "0.60"
+        rmin = "0.9"
+        thermostat_interval = "0"
+    }
+    tune {
+        check_overflow = "true"
+        checkpoint {
+            interval = "1200"
+        }
+        energy {
+            first = "0"
+            format = "eneseq"
+            interval = "480"
+            outdir = "energy"
+        }
+        go_verbosity = "0"
+        last_time = "Inf"
+        machine_size = ["8" "8" "8"]
+        regenerateBondProgram = "true"
+        trajectory {
+            first = "0"
+            format = "dtr"
+            interval = "120"
+            outdir = "run.atr"
+            periodicfix = "true"
+        }
+    }
+}
+boot {
+    file = "start.dms"
+}
+force {
+    nonbonded {
+        electrostatic {
+            type = "ewald"
+        }
+        far {
+            n_k = ["64" "64" "64"]
+            r_spread = "7.731"
+            type = "gse"
+        }
+        r_cut = "11.17"
+        r_lazy = "11.67"
+    }
+}
+global_cell {
+    r_clone = "8.086"
+}
+integrator {
+    Ber_NPT {
+        barostat {
+            kappa = "4.5e-05"
+            max_expansion_per_step = "1.1"
+            min_contraction_per_step = "0.95"
+            tau = "2.0"
+        }
+        max_velocity_scaling = "1.2"
+        min_velocity_scaling = "0.85"
+        tau = ["1.0"]
+        thermostat_molecular_ke = "true"
+    }
+    Ber_NVT {
+        max_velocity_scaling = "1.2"
+        min_velocity_scaling = "0.85"
+        tau = ["1.0"]
+        thermostat_molecular_ke = "true"
+    }
+    Multigrator {
+        barostat {
+            MTK {
+                T_ref = "300.00"
+                tau = "0.0416667"
+                thermostat {
+                    NoseHoover {
+                        chain {
+                            mts = "1"
+                            tau = ["0.0416667" "0.0416667" "0.0416667"]
+                        }
+                    }
+                    type = "NoseHoover"
+                }
+            }
+            interval = "240"
+            type = "MTK"
+        }
+        nve {
+            PLS {
+                number_of_stages = "3"
+            }
+            type = "PLS"
+        }
+        thermostat {
+            NoseHoover {
+                chains = [{
+                    mts = "1"
+                    tau = ["0.0416667" "0.0416667" "0.0416667"]
+                }]
+                use_molecular_ke = "true"
+            }
+            interval = "24"
+            type = "NoseHoover"
+        }
+    }
+    NH_NVT {
+        thermostat = [{
+            mts = "2"
+            tau = ["1." "1." "1."]
+        }]
+        thermostat_molecular_ke = "true"
+    }
+    V_NVE {
+    }
+    dt = "0.0020"
+    pressure {
+        isotropy = "isotropic"
+        max_margin_contraction = "0.9"
+        p_ref = "1"
+        tension_ref = ["0" "0" "0" "0" "0" "0" "0" "0" "0"]
+    }
+    remove_com_motion = "true"
+    respa {
+        bonded_interval = "1"
+        nonbonded_far_interval = "3"
+        nonbonded_near_interval = "1"
+    }
+    temperature = [{
+        T_ref = "300"
+    }]
+    type = "Multigrator"
+}
+
